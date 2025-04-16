@@ -115,7 +115,7 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
     });
 
     // Rodapé
-    const footerText = "Documento referente ao tempo de trabalho na digitalização - Arquivar Brasília, por Hugo Moraes.";
+    const footerText = "Documento referente ao tempo de trabalho na digitalização - Arquivar Brasília,Software Desenvolvido por Hugo Moraes.";
     const pageCount = doc.internal.pages.length;
     
     for (let i = 1; i <= pageCount; i++) {

@@ -16,7 +16,7 @@ export interface ServicosData {
   };
   caixas: {
     quantidade: number;
-    complexidade: 'simples' | 'intermediaria' | 'complexa';
+    complexidade: "simples" | "intermediaria" | "complexa";
   };
 }
 
