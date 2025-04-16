@@ -94,7 +94,7 @@ Exemplo de requisição:
 
 Endpoint de verificação de saúde da API.
 
-## Como usar
+## Como usar DEV
 
 1. Instale as dependências:
 
@@ -102,7 +102,7 @@ Endpoint de verificação de saúde da API.
 npm install
 ```
 
-2. Inicie o servidor:
+2. Inicie o servidor DEV:
 
 ```bash
 npm run dev
@@ -112,6 +112,25 @@ npm run dev
 
 ```bash
 http://localhost:5173
+```
+## Como usar PROD
+
+1. Instale as dependências:
+
+```bash
+npm install
+```
+
+2. Inicie o servidor RECT:
+
+```bash
+node src/server.js
+```
+
+3. O servidor estará disponível em:
+
+```bash
+http://localhost:3001
 ```
 
 ## Screenshots
