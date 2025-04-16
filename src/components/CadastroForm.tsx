@@ -14,11 +14,11 @@ export function CadastroForm({ cadastro, onUpdate, onAdvance }: Props) {
       <div className="max-w-4xl mx-auto">
         <Timeline currentStep={1} />
         <div className="bg-white p-8 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Cadastro do Usuário</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Cadastro de Cliente</h2>
           <div className="space-y-4">
             <input
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#88BD43] focus:border-transparent"
-              placeholder="Nome do Usuário"
+              placeholder="Nome do Vendedor"
               value={cadastro.nomeUsuario}
               onChange={(e) => onUpdate({ nomeUsuario: e.target.value })}
             />
