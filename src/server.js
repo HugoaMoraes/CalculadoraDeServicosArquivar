@@ -3,10 +3,11 @@ import cors from 'cors';
 import PDFDocument from 'pdfkit';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('dist'));
 
 const TEMPO_PREPARACAO_POR_CAIXA_MIN = 60;
 const TEMPO_REMONTAGEM_POR_CAIXA_MIN = 45;
