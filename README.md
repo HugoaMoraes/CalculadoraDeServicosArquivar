@@ -131,7 +131,7 @@ http://localhost:5173
 ## Diagrama
 
 <div align="center">
-<img src="" width="auto" />
+<img src="https://github.com/user-attachments/assets/24d83928-5861-48b8-b6d7-c9f925b4eca5" width="auto" />
 </div>
 
 ## Informações:

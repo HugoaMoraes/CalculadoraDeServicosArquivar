@@ -97,7 +97,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <a href="https://github.com/HugoaMoraes" className="github-corner" aria-label="View source on GitHub">
+      <a href="https://github.com/HugoaMoraes/CalculadoraDeServicosArquivar" className="github-corner" aria-label="View source on GitHub">
         <svg width="85" height="85" viewBox="0 0 250 250"
           style={{ fill: '#88BD43', color: '#fffeff', position: 'absolute', top: 0, border: 0, right: 0 }} aria-hidden="true">
           <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
