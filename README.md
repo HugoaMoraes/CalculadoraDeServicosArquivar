@@ -113,7 +113,7 @@ npm run dev
 ```bash
 http://localhost:5173
 ```
-3. Build:
+4. Build:
 
 ```bash
 npm run build
