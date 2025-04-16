@@ -113,6 +113,11 @@ npm run dev
 ```bash
 http://localhost:5173
 ```
+3. Build:
+
+```bash
+npm run build
+```
 
 ## Como usar PROD
 
