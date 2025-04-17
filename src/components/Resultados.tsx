@@ -70,7 +70,7 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
     doc.text(`Velocidade do scanner: ${servicos.digitalizacao.tempoScanner} páginas por minuto`, 20, 140);
     doc.text(`Indexações: ${servicos.indexacao.quantidade}`, 20, 150);
     doc.text(`Tempo por indexação: ${servicos.indexacao.tempoPorArquivo} seg`, 20, 160);
-    doc.text(`Caixas: ${servicos.caixas}`, 20, 170);
+    doc.text(`Caixas: ${servicos.caixas.quantidade}`, 20, 170);
     
     // Resultados
     doc.setFontSize(14);
