@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResultadosData, CadastroData, ServicosData } from '../types';
+import { ResultadosData, CadastroData, ServicosData, SetorResultado } from '../types';
 import { jsPDF } from 'jspdf';
 import { Timeline } from './Timeline';
 
@@ -7,7 +7,9 @@ interface Props {
   resultados: ResultadosData;
   cadastro: CadastroData;
   servicos: ServicosData;
+  setoresResultados: SetorResultado[];
   onRestart: () => void;
+  onNovoSetor: () => void;
 }
 
 interface ColaboradorTempo {
@@ -15,9 +17,8 @@ interface ColaboradorTempo {
   dias: number;
 }
 
-export function Resultados({ resultados, cadastro, servicos, onRestart }: Props) {
-  const calcularTemposPorColaborador = (): ColaboradorTempo[] => {
-    const horasTotal = parseFloat(resultados.totalComMargem);
+export function Resultados({ resultados, cadastro, servicos, setoresResultados, onRestart, onNovoSetor }: Props) {
+  const calcularTemposPorColaborador = (horasTotal: number): ColaboradorTempo[] => {
     const horasPorDia = 8;
     const horasHomem = horasTotal;
     
@@ -30,7 +31,7 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
     });
   };
 
-  const temposPorColaborador = calcularTemposPorColaborador();
+  const temposPorColaborador = calcularTemposPorColaborador(parseFloat(resultados.totalComMargem));
 
   const gerarResumoPDF = () => {
     const doc = new jsPDF();
@@ -55,7 +56,7 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
     doc.line(20, 52, 190, 52);
     
     doc.setFontSize(12);
-    doc.text(`Usuário: ${cadastro.nomeUsuario}`, 20, 65);
+    doc.text(`Vendedor: ${cadastro.nomeUsuario}`, 20, 65);
     doc.text(`Cliente: ${cadastro.nomeCliente}`, 20, 75);
     doc.text(`Data: ${cadastro.data}`, 20, 85);
     doc.text(`Setor: ${cadastro.setor}`, 20, 95);
@@ -71,23 +72,24 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
     doc.text(`Indexações: ${servicos.indexacao.quantidade}`, 20, 150);
     doc.text(`Tempo por indexação: ${servicos.indexacao.tempoPorArquivo} seg`, 20, 160);
     doc.text(`Caixas: ${servicos.caixas.quantidade}`, 20, 170);
+    doc.text(`Complexidade: ${servicos.caixas.complexidade}`, 20, 180);
     
     // Resultados
     doc.setFontSize(14);
-    doc.text('Tempo Estimado por Serviço', 20, 190);
-    doc.line(20, 192, 190, 192);
+    doc.text('Tempo Estimado por Serviço', 20, 200);
+    doc.line(20, 202, 190, 202);
     
     doc.setFontSize(12);
-    doc.text(`Preparação: ${resultados.preparacao} horas`, 20, 205);
-    doc.text(`Digitalização: ${resultados.digitalizacao} horas`, 20, 215);
-    doc.text(`Indexação: ${resultados.indexacao} horas`, 20, 225);
-    doc.text(`Remontagem: ${resultados.remontagem} horas`, 20, 235);
+    doc.text(`Preparação: ${resultados.preparacao} horas`, 20, 215);
+    doc.text(`Digitalização: ${resultados.digitalizacao} horas`, 20, 225);
+    doc.text(`Indexação: ${resultados.indexacao} horas`, 20, 235);
+    doc.text(`Remontagem: ${resultados.remontagem} horas`, 20, 245);
     
     // Total
     doc.setFillColor(240, 240, 240);
-    doc.rect(20, 245, 170, 25, 'F');
+    doc.rect(20, 255, 170, 25, 'F');
     doc.setFontSize(14);
-    doc.text(`Total com margem de 10%: ${resultados.totalComMargem} horas`, 25, 260);
+    doc.text(`Total com margem de 10%: ${resultados.totalComMargem} horas`, 25, 270);
     
     // Adicionar nova página para estimativas por colaborador
     doc.addPage();
@@ -126,7 +128,113 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
     }
     
     // Salvar o PDF
-    doc.save(`resumo_servicos_${cadastro.nomeCliente}.pdf`);
+    doc.save(`resumo_servicos_${cadastro.nomeCliente}_${cadastro.setor}.pdf`);
+  };
+
+  const gerarConsolidadoPDF = () => {
+    const doc = new jsPDF();
+    
+    // Configurações iniciais
+    doc.setFont('helvetica');
+    
+    // Cabeçalho
+    doc.setFillColor(136, 189, 67);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.text('Resumo Consolidado', 105, 25, { align: 'center' });
+    
+    // Reset cor do texto
+    doc.setTextColor(0, 0, 0);
+    
+    // Informações do cliente
+    doc.setFontSize(14);
+    doc.text('Informações do Cliente', 20, 50);
+    doc.setDrawColor(136, 189, 67);
+    doc.line(20, 52, 190, 52);
+    
+    doc.setFontSize(12);
+    doc.text(`Vendedor: ${cadastro.nomeUsuario}`, 20, 65);
+    doc.text(`Cliente: ${cadastro.nomeCliente}`, 20, 75);
+    doc.text(`Data: ${cadastro.data}`, 20, 85);
+    
+    // Resultados por setor
+    doc.setFontSize(14);
+    doc.text('Resultados por Setor', 20, 105);
+    doc.line(20, 107, 190, 107);
+    
+    // Lista de setores
+    const setores = setoresResultados.map(s => s.setor).join(', ');
+    doc.setFontSize(12);
+    doc.text(`Setores: ${setores}`, 20, 120);
+    
+    // Somatório dos resultados
+    let totalPreparacao = 0;
+    let totalDigitalizacao = 0;
+    let totalIndexacao = 0;
+    let totalRemontagem = 0;
+    let totalHoras = 0;
+    
+    setoresResultados.forEach((setorRes) => {
+      totalPreparacao += parseFloat(setorRes.resultados.preparacao);
+      totalDigitalizacao += parseFloat(setorRes.resultados.digitalizacao);
+      totalIndexacao += parseFloat(setorRes.resultados.indexacao);
+      totalRemontagem += parseFloat(setorRes.resultados.remontagem);
+      totalHoras += parseFloat(setorRes.resultados.totalComMargem);
+    });
+    
+    // Exibir totais
+    doc.text(`Preparação: ${totalPreparacao.toFixed(2)}h`, 20, 140);
+    doc.text(`Digitalização: ${totalDigitalizacao.toFixed(2)}h`, 20, 155);
+    doc.text(`Indexação: ${totalIndexacao.toFixed(2)}h`, 20, 170);
+    doc.text(`Remontagem: ${totalRemontagem.toFixed(2)}h`, 20, 185);
+    
+    // Total geral
+    doc.setFillColor(240, 240, 240);
+    doc.rect(20, 200, 170, 25, 'F');
+    doc.setFontSize(14);
+    doc.text(`Total geral: ${totalHoras.toFixed(2)} horas`, 25, 215);
+    
+    // Nova página para estimativas consolidadas
+    doc.addPage();
+    
+    // Cabeçalho da segunda página
+    doc.setFillColor(136, 189, 67);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.text('Estimativas Consolidadas', 105, 25, { align: 'center' });
+    
+    // Reset cor do texto
+    doc.setTextColor(0, 0, 0);
+    
+    // Estimativas por quantidade de colaboradores
+    doc.setFontSize(14);
+    doc.text('Tempo Estimado por Quantidade de Colaboradores', 20, 50);
+    doc.line(20, 52, 190, 52);
+    
+    const temposConsolidados = calcularTemposPorColaborador(totalHoras);
+    
+    let yPos = 70;
+    temposConsolidados.forEach((tempo) => {
+      doc.setFontSize(12);
+      doc.text(`${tempo.quantidade} colaborador${tempo.quantidade > 1 ? 'es' : ''}: ${tempo.dias} dia${tempo.dias > 1 ? 's' : ''} úteis`, 20, yPos);
+      yPos += 10;
+    });
+    
+    // Rodapé
+    const footerText = "Este documento é referente ao tempo de trabalho da digitalização Arquivar Brasília, sistema desenvolvido por Hugo Moraes";
+    const pageCount = doc.getNumberOfPages();
+    
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.setTextColor(128, 128, 128);
+      doc.text(footerText, 105, 285, { align: 'center' });
+    }
+    
+    // Salvar o PDF
+    doc.save(`resumo_consolidado_${cadastro.nomeCliente}.pdf`);
   };
 
   return (
@@ -178,16 +286,29 @@ export function Resultados({ resultados, cadastro, servicos, onRestart }: Props)
 
             <div className="flex gap-4 mt-6">
               <button
-                className="flex-1 bg-[#88BD43] text-white py-2 px-4 rounded-lg hover:bg-[#7AAD35] transition-colors"
-                onClick={gerarResumoPDF}
-              >
-                Gerar PDF
-              </button>
-              <button
                 className="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors"
                 onClick={onRestart}
               >
                 Novo Cálculo
+              </button>
+              <button
+                className="flex-1 bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors"
+                onClick={onNovoSetor}
+              >
+                Novo Setor
+              </button>
+              <button
+                className="flex-1 bg-[#7AAD35] text-white py-2 px-4 rounded-lg hover:bg-[#6A9D25] transition-colors"
+                onClick={gerarConsolidadoPDF}
+                disabled={setoresResultados.length === 0}
+              >
+                Consolidado (PDF)
+              </button>
+              <button
+                className="flex-1 bg-[#88BD43] text-white py-2 px-4 rounded-lg hover:bg-[#7AAD35] transition-colors"
+                onClick={gerarResumoPDF}
+              >
+                Gerar PDF
               </button>
             </div>
           </div>

@@ -16,7 +16,7 @@ export interface ServicosData {
   };
   caixas: {
     quantidade: number;
-    complexidade: "simples" | "intermediaria" | "complexa";
+    complexidade: 'simples' | 'intermediaria' | 'complexa';
   };
 }
 
@@ -31,4 +31,9 @@ export interface ResultadosData {
 export interface ComplexidadeTempo {
   preparacao: number;
   remontagem: number;
+}
+
+export interface SetorResultado {
+  setor: string;
+  resultados: ResultadosData;
 }

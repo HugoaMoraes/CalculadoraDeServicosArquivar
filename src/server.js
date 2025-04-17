@@ -11,6 +11,7 @@ app.use(express.static("dist"));
 
 const TEMPO_PREPARACAO_POR_CAIXA_MIN = 60;
 const TEMPO_REMONTAGEM_POR_CAIXA_MIN = 45;
+const NOME_ARQUIVO_SAIDA_PDF = "relatorio.pdf";
 
 function calcularTempos(servicos) {
   const { digitalizacao, indexacao, caixas } = servicos;
@@ -36,79 +37,56 @@ function calcularTempos(servicos) {
   };
 }
 
+const middlewareVerificarCorpoRequisicao = (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).json({ error: "Corpo da requisição vazio" });
+  }
+  next();
+};
+
 // Endpoint para calcular tempos
-app.post("/api/calcular", (req, res) => {
+app.post("/api/calcular", middlewareVerificarCorpoRequisicao, (req, res) => {
   try {
     const { servicos } = req.body;
     const resultados = calcularTempos(servicos);
     res.json(resultados);
   } catch (error) {
-    res.status(400).json({ error: "Dados inválidos" });
+    res.status(400).json({ error: "Erro ao calcular tempos" });
   }
 });
 
 // Endpoint para gerar PDF
-app.post("/api/gerar-pdf", (req, res) => {
+app.post("/api/gerar-pdf", middlewareVerificarCorpoRequisicao, (req, res) => {
   try {
-    const { cadastro, servicos, resultados } = req.body;
+    const { servicos } = req.body;
+    const resultados = calcularTempos(servicos);
 
     const doc = new PDFDocument();
-
-    // Configurar cabeçalhos para download do PDF
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=resumo_servicos_${cadastro.nomeCliente}.pdf`
-    );
-
-    // Pipe o PDF para a resposta
     doc.pipe(res);
-
-    // Adicionar conteúdo ao PDF
-    doc.fontSize(16).text("Resumo de Serviços", { align: "center" });
-    doc.moveDown();
-
-    doc.fontSize(12).text(`Usuário: ${cadastro.nomeUsuario}`);
-    doc.text(`Cliente: ${cadastro.nomeCliente}`);
-    doc.text(`Data: ${cadastro.data}`);
-    doc.text(`Setor: ${cadastro.setor}`);
-    doc.moveDown();
-
-    doc.text("Dados Informados", { underline: true });
-    doc.text(`Páginas para digitalização: ${servicos.digitalizacao.paginas}`);
-    doc.text(
-      `Tempo por página (scanner): ${servicos.digitalizacao.tempoScanner} min`
-    );
-    doc.text(`Indexações: ${servicos.indexacao.quantidade}`);
-    doc.text(`Tempo por indexação: ${servicos.indexacao.tempoPorArquivo} seg`);
-    doc.text(`Caixas: ${servicos.caixas}`);
-    doc.moveDown();
-
-    doc.text("Tempo Estimado por Serviço (em horas)", { underline: true });
-    doc.text(`Preparação: ${resultados.preparacao}`);
-    doc.text(`Digitalização: ${resultados.digitalizacao}`);
-    doc.text(`Indexação: ${resultados.indexacao}`);
-    doc.text(`Remontagem: ${resultados.remontagem}`);
-    doc.moveDown();
-
+    doc.fontSize(24).text("Relatório de Tempos", 100, 100);
     doc
-      .fontSize(14)
-      .text(`Total com margem de 10%: ${resultados.totalComMargem} horas`, {
-        bold: true,
-      });
-
-    // Finalizar o PDF
+      .fontSize(18)
+      .text(`Preparação: ${resultados.preparacao} horas`, 100, 150);
+    doc
+      .fontSize(18)
+      .text(`Digitalização: ${resultados.digitalizacao} horas`, 100, 200);
+    doc.fontSize(18).text(`Indexação: ${resultados.indexacao} horas`, 100, 250);
+    doc
+      .fontSize(18)
+      .text(`Remontagem: ${resultados.remontagem} horas`, 100, 300);
+    doc
+      .fontSize(18)
+      .text(`Total com margem: ${resultados.totalComMargem} horas`, 100, 350);
     doc.end();
+    res.set(
+      "Content-Disposition",
+      `attachment; filename="${NOME_ARQUIVO_SAIDA_PDF}"`
+    );
   } catch (error) {
     res.status(400).json({ error: "Erro ao gerar PDF" });
   }
 });
 
-// Rota de teste
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
 app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+  console.log(`Servidor rodando na porta ${port}`);
 });

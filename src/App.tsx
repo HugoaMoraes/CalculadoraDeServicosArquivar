@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CadastroForm } from './components/CadastroForm';
 import { ServicosForm } from './components/ServicosForm';
 import { Resultados } from './components/Resultados';
-import { CadastroData, ServicosData, ResultadosData, ComplexidadeTempo } from './types';
+import { CadastroData, ServicosData, ResultadosData, ComplexidadeTempo, SetorResultado } from './types';
 
 const TEMPOS_COMPLEXIDADE: Record<string, ComplexidadeTempo> = {
   simples: { preparacao: 30, remontagem: 15 },
@@ -39,6 +39,7 @@ function App() {
     remontagem: '0',
     totalComMargem: '0'
   });
+  const [setoresResultados, setSetoresResultados] = useState<SetorResultado[]>([]);
 
   const calcularTempos = () => {
     const { digitalizacao, indexacao, caixas } = servicos;
@@ -53,14 +54,16 @@ function App() {
     const tempoTotalMin = tempoPreparacaoMin + tempoDigitalizacaoMin + tempoIndexacaoMin + tempoRemontagemMin;
     const tempoComMargem = tempoTotalMin * 1.10;
 
-    setResultados({
+    const novosResultados = {
       preparacao: (tempoPreparacaoMin / 60).toFixed(2),
       digitalizacao: (tempoDigitalizacaoMin / 60).toFixed(2),
       indexacao: (tempoIndexacaoMin / 60).toFixed(2),
       remontagem: (tempoRemontagemMin / 60).toFixed(2),
       totalComMargem: (tempoComMargem / 60).toFixed(2)
-    });
+    };
 
+    setResultados(novosResultados);
+    setSetoresResultados([...setoresResultados, { setor: cadastro.setor, resultados: novosResultados }]);
     setTela(3);
   };
 
@@ -91,6 +94,29 @@ function App() {
       indexacao: '0',
       remontagem: '0',
       totalComMargem: '0'
+    });
+    setSetoresResultados([]);
+    setTela(1);
+  };
+
+  const novoSetor = () => {
+    setCadastro({
+      ...cadastro,
+      setor: ''
+    });
+    setServicos({
+      digitalizacao: {
+        paginas: 0,
+        tempoScanner: 10
+      },
+      indexacao: {
+        quantidade: 0,
+        tempoPorArquivo: 10
+      },
+      caixas: {
+        quantidade: 0,
+        complexidade: 'simples'
+      }
     });
     setTela(1);
   };
@@ -133,7 +159,9 @@ function App() {
               resultados={resultados}
               cadastro={cadastro}
               servicos={servicos}
+              setoresResultados={setoresResultados}
               onRestart={reiniciarCalculos}
+              onNovoSetor={novoSetor}
             />
           )}
         </div>
