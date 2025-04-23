@@ -28,7 +28,7 @@ export function ServicosForm({
         </h2>
         <div className="space-y-6">
           <div>
-            <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center text-base font-medium text-gray-700 mb-2">
               <FileScan className="w-6 h-6 text-[#88BD43] mr-2" />
               Páginas para digitalização:
             </label>
@@ -75,7 +75,7 @@ export function ServicosForm({
           </div>
 
           <div>
-            <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center text-base font-medium text-gray-700 mb-2">
               <FileSearch className="w-6 h-6 text-[#88BD43] mr-2" />
               Indexações:
             </label>
@@ -122,7 +122,7 @@ export function ServicosForm({
           </div>
 
           <div>
-            <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center text-base font-medium text-gray-700 mb-2">
               <Archive className="w-6 h-6 text-[#88BD43] mr-2" />
               Quantidade de caixas:
             </label>
