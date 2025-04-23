@@ -6,14 +6,25 @@ interface Props {
   servicos: ServicosData;
   onUpdate: (data: Partial<ServicosData>) => void;
   onCalculate: () => void;
+  setor: string;
+  onTimelineClick: (step: number) => void;
 }
 
-export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
+export function ServicosForm({
+  servicos,
+  onUpdate,
+  onCalculate,
+  setor,
+  onTimelineClick,
+}: Props) {
   return (
     <div className="max-w-4xl mx-auto">
-      <Timeline currentStep={2} />
+      <Timeline currentStep={2} onStepClick={onTimelineClick} />
       <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Serviços</h2>
+        <h2 className="text-2xl font-bold mb-6">
+          <span className="text-gray-800">Serviços do Setor </span>
+          <span className="text-[#88BD43]">{setor}</span>
+        </h2>
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -23,12 +34,14 @@ export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
               type="number"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#88BD43] focus:border-transparent"
               value={servicos.digitalizacao.paginas || ''}
-              onChange={(e) => onUpdate({
-                digitalizacao: {
-                  ...servicos.digitalizacao,
-                  paginas: Number(e.target.value)
-                }
-              })}
+              onChange={(e) =>
+                onUpdate({
+                  digitalizacao: {
+                    ...servicos.digitalizacao,
+                    paginas: Number(e.target.value),
+                  },
+                })
+              }
             />
           </div>
 
@@ -43,12 +56,14 @@ export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
                     type="radio"
                     name="tempoScanner"
                     checked={servicos.digitalizacao.tempoScanner === velocidade}
-                    onChange={() => onUpdate({
-                      digitalizacao: {
-                        ...servicos.digitalizacao,
-                        tempoScanner: velocidade
-                      }
-                    })}
+                    onChange={() =>
+                      onUpdate({
+                        digitalizacao: {
+                          ...servicos.digitalizacao,
+                          tempoScanner: velocidade,
+                        },
+                      })
+                    }
                     className="text-[#88BD43] focus:ring-[#88BD43]"
                   />
                   <span>{velocidade} ppm</span>
@@ -65,12 +80,14 @@ export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
               type="number"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#88BD43] focus:border-transparent"
               value={servicos.indexacao.quantidade || ''}
-              onChange={(e) => onUpdate({
-                indexacao: {
-                  ...servicos.indexacao,
-                  quantidade: Number(e.target.value)
-                }
-              })}
+              onChange={(e) =>
+                onUpdate({
+                  indexacao: {
+                    ...servicos.indexacao,
+                    quantidade: Number(e.target.value),
+                  },
+                })
+              }
             />
           </div>
 
@@ -85,12 +102,14 @@ export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
                     type="radio"
                     name="tempoIndex"
                     checked={servicos.indexacao.tempoPorArquivo === tempo}
-                    onChange={() => onUpdate({
-                      indexacao: {
-                        ...servicos.indexacao,
-                        tempoPorArquivo: tempo
-                      }
-                    })}
+                    onChange={() =>
+                      onUpdate({
+                        indexacao: {
+                          ...servicos.indexacao,
+                          tempoPorArquivo: tempo,
+                        },
+                      })
+                    }
                     className="text-[#88BD43] focus:ring-[#88BD43]"
                   />
                   <span>{tempo}s</span>
@@ -107,14 +126,16 @@ export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
               type="number"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#88BD43] focus:border-transparent mb-4"
               value={servicos.caixas.quantidade || ''}
-              onChange={(e) => onUpdate({
-                caixas: {
-                  ...servicos.caixas,
-                  quantidade: Number(e.target.value)
-                }
-              })}
+              onChange={(e) =>
+                onUpdate({
+                  caixas: {
+                    ...servicos.caixas,
+                    quantidade: Number(e.target.value),
+                  },
+                })
+              }
             />
-            
+
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Complexidade das caixas:
             </label>
@@ -122,19 +143,24 @@ export function ServicosForm({ servicos, onUpdate, onCalculate }: Props) {
               {[
                 { value: 'simples', label: 'Simples' },
                 { value: 'intermediaria', label: 'Intermediária' },
-                { value: 'complexa', label: 'Complexa' }
+                { value: 'complexa', label: 'Complexa' },
               ].map((tipo) => (
                 <label key={tipo.value} className="flex items-center space-x-2">
                   <input
                     type="radio"
                     name="complexidadeCaixa"
                     checked={servicos.caixas.complexidade === tipo.value}
-                    onChange={() => onUpdate({
-                      caixas: {
-                        ...servicos.caixas,
-                        complexidade: tipo.value as 'simples' | 'intermediaria' | 'complexa'
-                      }
-                    })}
+                    onChange={() =>
+                      onUpdate({
+                        caixas: {
+                          ...servicos.caixas,
+                          complexidade: tipo.value as
+                            | 'simples'
+                            | 'intermediaria'
+                            | 'complexa',
+                        },
+                      })
+                    }
                     className="text-[#88BD43] focus:ring-[#88BD43]"
                   />
                   <span>{tipo.label}</span>

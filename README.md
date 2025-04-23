@@ -12,7 +12,7 @@ Esta é a API do sistema de cálculo de tempo para serviços de digitalização.
 
 ## Versão
 
-`v.1`
+`v.2.0.0`
 
 ## Links
 
@@ -113,6 +113,7 @@ npm run dev
 ```bash
 http://localhost:5173
 ```
+
 4. Build:
 
 ```bash

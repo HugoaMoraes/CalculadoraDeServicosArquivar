@@ -1,17 +1,17 @@
-import express from "express";
-import cors from "cors";
-import PDFDocument from "pdfkit";
+import express from 'express';
+import cors from 'cors';
+import PDFDocument from 'pdfkit';
 
 const app = express();
 const port = 3001;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("dist"));
+app.use(express.static('dist'));
 
 const TEMPO_PREPARACAO_POR_CAIXA_MIN = 60;
 const TEMPO_REMONTAGEM_POR_CAIXA_MIN = 45;
-const NOME_ARQUIVO_SAIDA_PDF = "relatorio.pdf";
+const NOME_ARQUIVO_SAIDA_PDF = 'relatorio.pdf';
 
 function calcularTempos(servicos) {
   const { digitalizacao, indexacao, caixas } = servicos;
@@ -39,31 +39,31 @@ function calcularTempos(servicos) {
 
 const middlewareVerificarCorpoRequisicao = (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({ error: "Corpo da requisição vazio" });
+    return res.status(400).json({ error: 'Corpo da requisição vazio' });
   }
   next();
 };
 
 // Endpoint para calcular tempos
-app.post("/api/calcular", middlewareVerificarCorpoRequisicao, (req, res) => {
+app.post('/api/calcular', middlewareVerificarCorpoRequisicao, (req, res) => {
   try {
     const { servicos } = req.body;
     const resultados = calcularTempos(servicos);
     res.json(resultados);
   } catch (error) {
-    res.status(400).json({ error: "Erro ao calcular tempos" });
+    res.status(400).json({ error: 'Erro ao calcular tempos' });
   }
 });
 
 // Endpoint para gerar PDF
-app.post("/api/gerar-pdf", middlewareVerificarCorpoRequisicao, (req, res) => {
+app.post('/api/gerar-pdf', middlewareVerificarCorpoRequisicao, (req, res) => {
   try {
     const { servicos } = req.body;
     const resultados = calcularTempos(servicos);
 
     const doc = new PDFDocument();
     doc.pipe(res);
-    doc.fontSize(24).text("Relatório de Tempos", 100, 100);
+    doc.fontSize(24).text('Relatório de Tempos', 100, 100);
     doc
       .fontSize(18)
       .text(`Preparação: ${resultados.preparacao} horas`, 100, 150);
@@ -79,11 +79,11 @@ app.post("/api/gerar-pdf", middlewareVerificarCorpoRequisicao, (req, res) => {
       .text(`Total com margem: ${resultados.totalComMargem} horas`, 100, 350);
     doc.end();
     res.set(
-      "Content-Disposition",
+      'Content-Disposition',
       `attachment; filename="${NOME_ARQUIVO_SAIDA_PDF}"`
     );
   } catch (error) {
-    res.status(400).json({ error: "Erro ao gerar PDF" });
+    res.status(400).json({ error: 'Erro ao gerar PDF' });
   }
 });
 
