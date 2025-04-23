@@ -13,6 +13,8 @@ import {
   Printer,
   FileStack,
   FileClock,
+  FileDown,
+  FolderDown,
 } from 'lucide-react';
 
 interface Props {
@@ -414,17 +416,23 @@ export function Resultados({
                 Novo Setor
               </button>
               <button
-                className="flex-1 bg-[#7AAD35] text-white py-2 px-4 rounded-lg hover:bg-[#6A9D25] transition-colors"
+                className="flex items-center justify-center flex-1 bg-[#7AAD35] text-white py-2 px-4 rounded-lg hover:bg-[#6A9D25] transition-colors"
                 onClick={gerarConsolidadoPDF}
                 disabled={setoresResultados.length === 0}
               >
-                Consolidado (PDF)
+                <span className="flex items-center gap-x-2">
+                  Consolidado
+                  <FolderDown className="w-6 h-6" />
+                </span>
               </button>
               <button
-                className="flex-1 bg-[#88BD43] text-white py-2 px-4 rounded-lg hover:bg-[#7AAD35] transition-colors"
+                className="flex items-center justify-center flex-1 bg-[#88BD43] text-white py-2 px-4 rounded-lg hover:bg-[#7AAD35] transition-colors"
                 onClick={gerarResumoPDF}
               >
-                Gerar PDF
+                <span className="flex items-center gap-x-2">
+                  Gerar PDF
+                  <FileDown className="w-6 h-6" />
+                </span>
               </button>
             </div>
           </div>
