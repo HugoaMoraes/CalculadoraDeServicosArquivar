@@ -143,21 +143,22 @@ http://localhost:3001
 ## Screenshots
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/ffc9e6f0-931c-487f-9f72-ec56e3657c51" width="auto" />
+<img src="https://github.com/user-attachments/assets/393d29a3-c3ba-4f5d-bd8d-edf80c9e9d81" width="auto" />
 </div>
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/c4873672-b54f-49c3-be28-d97a26db1851" width="auto" />
+<img src="https://github.com/user-attachments/assets/b5b70d9c-0560-4ccd-9a89-9ed7c0f7409f" width="auto" />
 </div>
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/fed1d043-c4e3-4f42-bac3-a08c030910c2" width="auto" />
+<img src="https://github.com/user-attachments/assets/0ad142c0-e1b3-4d09-9d0c-8fa64866cf12" width="auto" />
 </div>
 
 ## Diagrama
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/24d83928-5861-48b8-b6d7-c9f925b4eca5" width="auto" />
+<img src="https://github.com/user-attachments/assets/2f2b6915-da67-4c03-bdf8-21f07f736091" width="auto" />
 </div>
 
 ## Informações:
