@@ -1,6 +1,7 @@
 import React from 'react';
 import { ServicosData } from '../types';
 import { Timeline } from './Timeline';
+import { FileScan, Archive, FileSearch } from 'lucide-react';
 
 interface Props {
   servicos: ServicosData;
@@ -27,7 +28,8 @@ export function ServicosForm({
         </h2>
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <FileScan className="w-6 h-6 text-[#88BD43] mr-2" />
               Páginas para digitalização:
             </label>
             <input
@@ -73,7 +75,8 @@ export function ServicosForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <FileSearch className="w-6 h-6 text-[#88BD43] mr-2" />
               Indexações:
             </label>
             <input
@@ -119,7 +122,8 @@ export function ServicosForm({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
+              <Archive className="w-6 h-6 text-[#88BD43] mr-2" />
               Quantidade de caixas:
             </label>
             <input

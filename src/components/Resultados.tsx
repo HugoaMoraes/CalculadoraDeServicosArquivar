@@ -7,6 +7,13 @@ import {
 } from '../types';
 import { jsPDF } from 'jspdf';
 import { Timeline } from './Timeline';
+import {
+  FileSearch,
+  ClipboardList,
+  Printer,
+  FileStack,
+  FileClock,
+} from 'lucide-react';
 
 interface Props {
   resultados: ResultadosData;
@@ -322,25 +329,37 @@ export function Resultados({
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600">Preparação</p>
+                <div className="flex items-center mb-2">
+                  <ClipboardList className="w-5 h-5 text-[#88BD43] mr-2" />
+                  <p className="text-sm text-gray-600">Preparação</p>
+                </div>
                 <p className="text-xl font-semibold">
                   {resultados.preparacao} horas
                 </p>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600">Digitalização</p>
+                <div className="flex items-center mb-2">
+                  <Printer className="w-5 h-5 text-[#88BD43] mr-2" />
+                  <p className="text-sm text-gray-600">Digitalização</p>
+                </div>
                 <p className="text-xl font-semibold">
                   {resultados.digitalizacao} horas
                 </p>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600">Indexação</p>
+                <div className="flex items-center mb-2">
+                  <FileSearch className="w-5 h-5 text-[#88BD43] mr-2" />
+                  <p className="text-sm text-gray-600">Indexação</p>
+                </div>
                 <p className="text-xl font-semibold">
                   {resultados.indexacao} horas
                 </p>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600">Remontagem</p>
+                <div className="flex items-center mb-2">
+                  <FileStack className="w-5 h-5 text-[#88BD43] mr-2" />
+                  <p className="text-sm text-gray-600">Remontagem</p>
+                </div>
                 <p className="text-xl font-semibold">
                   {resultados.remontagem} horas
                 </p>
@@ -348,7 +367,12 @@ export function Resultados({
             </div>
 
             <div className="mt-6 p-6 bg-[#F0F7E6] rounded-lg">
-              <p className="text-sm text-[#88BD43]">Total com margem de 10%</p>
+              <div className="flex items-center mb-2">
+                <FileClock className="w-5 h-5 text-[#88BD43] mr-2" />
+                <p className="text-sm text-[#88BD43]">
+                  Total com margem de 10%
+                </p>
+              </div>
               <p className="text-2xl font-bold text-[#88BD43]">
                 {resultados.totalComMargem} horas
               </p>
