@@ -131,7 +131,7 @@ npm install
 2. Inicie o servidor RECT:
 
 ```bash
-node src/server.js
+npm run start
 ```
 
 3. O servidor estará disponível em:
@@ -157,8 +157,7 @@ http://localhost:3001
 ## Diagrama
 
 <div align="center">
-<img src="https://github.com/user-attachments/assets/24d83928-5861-48b8-b6d7-c9f925b4eca5" width="auto" />
-<img src="https://github.com/user-attachments/assets/2f2b6915-da67-4c03-bdf8-21f07f736091" width="auto" />
+<img src="https://github.com/user-attachments/assets/024524c1-bfdc-40f0-ac64-9933630ea411" width="auto" />
 </div>
 
 ## Informações:
