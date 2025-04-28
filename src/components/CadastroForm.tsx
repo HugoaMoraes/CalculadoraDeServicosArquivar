@@ -1,6 +1,6 @@
 import React from 'react';
 import { CadastroData } from '../types';
-import { Timeline } from './Timeline';
+import { Timeline } from './ui/Timeline';
 
 interface Props {
   cadastro: CadastroData;

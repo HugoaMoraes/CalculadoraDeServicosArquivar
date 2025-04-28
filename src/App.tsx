@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { CadastroForm } from './components/CadastroForm';
 import { ServicosForm } from './components/ServicosForm';
 import { Resultados } from './components/Resultados';
-import {
-  CadastroData,
-  ServicosData,
-  ResultadosData,
-  ComplexidadeTempo,
-  SetorResultado,
-} from './types';
-
-const TEMPOS_COMPLEXIDADE: Record<string, ComplexidadeTempo> = {
-  simples: { preparacao: 30, remontagem: 15 },
-  intermediaria: { preparacao: 60, remontagem: 40 },
-  complexa: { preparacao: 90, remontagem: 60 },
-};
+import { CadastroData, ServicosData, ResultadosData } from './types';
+import { useSetorResultados } from './hooks/useSetorResultados';
+import { calcularTemposServico } from './utils/calculos';
 
 function App() {
   const [tela, setTela] = useState(1);
@@ -46,48 +36,18 @@ function App() {
     remontagem: '0',
     totalComMargem: '0',
   });
-  const [setoresResultados, setSetoresResultados] = useState<SetorResultado[]>(
-    []
-  );
 
-  const calcularTempos = () => {
-    const { digitalizacao, indexacao, caixas } = servicos;
+  const { setoresResultados, atualizarResultados, limparResultados } =
+    useSetorResultados();
 
-    const tempoDigitalizacaoMin =
-      digitalizacao.paginas / digitalizacao.tempoScanner;
-    const tempoIndexacaoMin =
-      (indexacao.quantidade * indexacao.tempoPorArquivo) / 60;
-
-    const temposComplexidade = TEMPOS_COMPLEXIDADE[caixas.complexidade];
-    const tempoPreparacaoMin =
-      caixas.quantidade * temposComplexidade.preparacao;
-    const tempoRemontagemMin =
-      caixas.quantidade * temposComplexidade.remontagem;
-
-    const tempoTotalMin =
-      tempoPreparacaoMin +
-      tempoDigitalizacaoMin +
-      tempoIndexacaoMin +
-      tempoRemontagemMin;
-    const tempoComMargem = tempoTotalMin * 1.1;
-
-    const novosResultados = {
-      preparacao: (tempoPreparacaoMin / 60).toFixed(2),
-      digitalizacao: (tempoDigitalizacaoMin / 60).toFixed(2),
-      indexacao: (tempoIndexacaoMin / 60).toFixed(2),
-      remontagem: (tempoRemontagemMin / 60).toFixed(2),
-      totalComMargem: (tempoComMargem / 60).toFixed(2),
-    };
-
+  const calcularTempos = useCallback(() => {
+    const novosResultados = calcularTemposServico(servicos);
     setResultados(novosResultados);
-    setSetoresResultados([
-      ...setoresResultados,
-      { setor: cadastro.setor, resultados: novosResultados },
-    ]);
+    atualizarResultados(cadastro.setor, novosResultados);
     setTela(3);
-  };
+  }, [servicos, cadastro.setor, atualizarResultados]);
 
-  const reiniciarCalculos = () => {
+  const reiniciarCalculos = useCallback(() => {
     setCadastro({
       nomeUsuario: '',
       data: '',
@@ -115,17 +75,17 @@ function App() {
       remontagem: '0',
       totalComMargem: '0',
     });
-    setSetoresResultados([]);
+    limparResultados();
     setTela(1);
     setIsNewSector(false);
-  };
+  }, [limparResultados]);
 
-  const novoSetor = () => {
+  const novoSetor = useCallback(() => {
     setIsNewSector(true);
-    setCadastro({
-      ...cadastro,
+    setCadastro((prev) => ({
+      ...prev,
       setor: '',
-    });
+    }));
     setServicos({
       digitalizacao: {
         paginas: 0,
@@ -141,11 +101,13 @@ function App() {
       },
     });
     setTela(1);
-  };
+  }, []);
 
-  const handleTimelineClick = (step: number) => {
-    setTela(step);
-  };
+  const handleTimelineClick = useCallback((step: number) => {
+    if (step < 3) {
+      setTela(step);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">

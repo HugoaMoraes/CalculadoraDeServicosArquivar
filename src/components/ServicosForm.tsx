@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ServicosData } from '../types';
-import { Timeline } from './Timeline';
-import { FileScan, Archive, FileSearch } from 'lucide-react';
+import { Timeline } from './ui/Timeline';
+import { Tooltip } from './ui/Tooltip';
+import { Info, FileScan, Archive, FileSearch } from 'lucide-react';
 
 interface Props {
   servicos: ServicosData;
@@ -18,6 +19,18 @@ export function ServicosForm({
   setor,
   onTimelineClick,
 }: Props) {
+  const complexidadeDescricoes = useMemo(
+    () => ({
+      simples:
+        'Documentos organizados, sem grampos ou clipes, fácil manuseio. 30min para preparação, 15min para remontagem',
+      intermediaria:
+        'Documentos parcialmente organizados, com grampos e clipes comuns. 60min para preparação, 40min para remontagem',
+      complexa:
+        'Documentos desorganizados, com múltiplos grampos, clipes e necessidade de restauração. 90min para preparação, 60min para remontagem',
+    }),
+    []
+  );
+
   return (
     <div className="max-w-4xl mx-auto">
       <Timeline currentStep={2} onStepClick={onTimelineClick} />
@@ -140,8 +153,27 @@ export function ServicosForm({
               }
             />
 
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
               Complexidade das caixas:
+              <Tooltip
+                content={
+                  <div className="space-y-2">
+                    <p>
+                      <strong>Simples:</strong> {complexidadeDescricoes.simples}
+                    </p>
+                    <p>
+                      <strong>Intermediária:</strong>{' '}
+                      {complexidadeDescricoes.intermediaria}
+                    </p>
+                    <p>
+                      <strong>Complexa:</strong>{' '}
+                      {complexidadeDescricoes.complexa}
+                    </p>
+                  </div>
+                }
+              >
+                <Info className="w-4 h-4 ml-2 text-gray-500 cursor-help" />
+              </Tooltip>
             </label>
             <div className="flex space-x-4">
               {[
