@@ -5,11 +5,15 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  onGeneratePDF: () => void;
+  onGeneratePDF: () => Promise<void>;
 }
 
 export function Modal({ isOpen, onClose, onConfirm, onGeneratePDF }: ModalProps) {
   if (!isOpen) return null;
+
+  const handleGeneratePDF = async () => {
+    await onGeneratePDF();
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -28,7 +32,7 @@ export function Modal({ isOpen, onClose, onConfirm, onGeneratePDF }: ModalProps)
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-end">
           <button
-            onClick={onGeneratePDF}
+            onClick={handleGeneratePDF}
             className="px-4 py-2 bg-[#88BD43] text-white rounded-lg hover:bg-[#7AAD35] transition-colors"
           >
             Gerar PDF
