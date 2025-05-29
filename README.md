@@ -12,7 +12,7 @@ Esta é a API do sistema de cálculo de tempo para serviços de digitalização.
 
 ## Versão
 
-`v.3.0.0`
+`v.3.0.1`
 
 ## Links
 
