@@ -166,7 +166,8 @@ export function Resultados({
       });
 
       // Minimal valid 1x1 transparent PNG as base64
-      const logo = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+      const logo =
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
       // Centraliza horizontalmente com largura proporcional
       const pageWidth = doc.internal.pageSize.getWidth();
@@ -296,7 +297,8 @@ export function Resultados({
       });
 
       // Minimal valid 1x1 transparent PNG as base64
-      const logo = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+      const logo =
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
       // Centraliza horizontalmente com largura proporcional
       const pageWidth = doc.internal.pageSize.getWidth();
